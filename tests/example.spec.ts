@@ -2,7 +2,6 @@ import { test, expect } from '@playwright/test';
 import { PlaywrightSignInPage } from './auth/signin';
 import { PlaywrightSignUpPage } from './auth/signup';
 import { PlaywrightDashboardPage } from './dashboard/dashboard';
-import { before } from 'node:test';
 
 test.describe('RodaCuan-e2e', () => {
   let SignInPage: PlaywrightSignInPage;
