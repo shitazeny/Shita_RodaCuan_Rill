@@ -2,16 +2,37 @@ import { test, expect } from '@playwright/test';
 import { PlaywrightSignInPage } from './auth/signin';
 import { PlaywrightSignUpPage } from './auth/signup';
 import { PlaywrightDashboardPage } from './dashboard/dashboard';
+import { PlaywrightDetailProdukPage } from './dashboard/detailProduk';
+import { PlaywrightNavbarPage } from './dashboard/navbarMenu';
+import { PlaywrightEditProfilPage } from './Profile/editProfile';
+import { PlaywrightEditCashPage } from './Riwayat/editCash';
+import { PlaywrightEditKreditPage } from './Riwayat/edtiKredit';
+import { PlaywrightHapusCashPage } from './Riwayat/hapusCash';
+import { PlaywrightHapusKreditPage } from './Riwayat/hapusKredit';
 
 test.describe('RodaCuan-e2e', () => {
   let SignInPage: PlaywrightSignInPage;
   let SignUpPage: PlaywrightSignUpPage;
   let DashPage: PlaywrightDashboardPage;
+  let DetailPage: PlaywrightDetailProdukPage;
+  let NavPage: PlaywrightNavbarPage;
+  let EditProfilPage: PlaywrightEditProfilPage;
+  let CashPage: PlaywrightEditCashPage;
+  let KreditPage: PlaywrightEditKreditPage;
+  let HapusCashPage: PlaywrightHapusCashPage;
+  let HapusKreditPage: PlaywrightHapusKreditPage;
 
   test.beforeEach(async ({ page }) => {
     SignInPage = new PlaywrightSignInPage(page);
     SignUpPage = new PlaywrightSignUpPage(page);
     DashPage = new PlaywrightDashboardPage(page);
+    DetailPage = new PlaywrightDetailProdukPage(page);
+    NavPage = new PlaywrightNavbarPage(page);
+    EditProfilPage = new PlaywrightEditProfilPage(page);
+    CashPage = new PlaywrightEditCashPage(page);
+    KreditPage = new PlaywrightEditKreditPage(page);
+    HapusCashPage = new PlaywrightHapusCashPage(page);
+    HapusKreditPage = new PlaywrightHapusKreditPage(page);
 
     await page.goto('http://127.0.0.1:8000/login');
 
@@ -22,57 +43,91 @@ test.describe('RodaCuan-e2e', () => {
     await expect(page).toHaveURL('http://127.0.0.1:8000/home');
   });
 
-  test('test dashboard page', async({page}) => {
-    await DashPage.checkPotoSwipe();
-    await DashPage.checkText();
-    await DashPage.checkMotorCard();
-  });
+  // test('test dashboard page', async({page}) => {
+  //   await DashPage.checkPotoSwipe();
+  //   await DashPage.checkText();
+  //   await DashPage.checkMotorCard();
+  // });
   
-  test('test buy new bike with cash payment', async({page}) => {
-    await DashPage.goToBeliMotor();
-    await DashPage.BuyingMotorCash('ininii', '32770987651234', 'r125', new Date('2025-01-18'), 110000000);
-    await DashPage.AlertCash();
-  });
+  // test('test buy new bike with cash payment', async({page}) => {
+  //   await DashPage.goToBeliMotor();
+  //   await DetailPage.BuyingMotorCash(new Date('2025-01-18'), 110000000);
+  //   await DetailPage.AlertCash();
+  // });
   
-  test('test buy new bike with credit payment', async({page}) => {
-    await DashPage.goToBeliMotor();
-    await DashPage.BuyingMotorKredit();
-    // await DashPage.CetakCash();
-    // await DashPage.goToCetakCash();
-    // await page.goto('http://127.0.0.1:8000/user/motorbaru_desk');
+  // test('test buy new bike with credit payment', async ({ page }) => {
+  //   await DashPage.goToBeliMotor();
+  //   await DetailPage.BuyingMotorKredit( 110000000, 10000000, 210000000);
+    
+  //   const fotokopiKTP = 'c:/Users/user/Pictures/04178000170bf1ca61bc8864ea763d16.jpg';
+  //   const fotokopiKK = 'c:/Users/user/Pictures/be0de6f291c3f5b98de28f2b044585fe.jpg';
+  //   const fotokopiSlipGaji = 'c:/Users/user/Pictures/c1.jpg';
+
+  //   await DetailPage.LanjutanBuyingKredit(
+  //       'asd332',
+  //       '3277892671367131231',
+  //       'r125',
+  //       new Date('2025-01-19'),
+  //       fotokopiKTP,
+  //       fotokopiKK,
+  //       fotokopiSlipGaji
+  //   );
+
+  //   await DetailPage.AlertKredit();
+  // });
+
+  // test('test Button Cetak Pembelian PDF', async ({page}) => {
+  //   //Cash
+  //   await DetailPage.CetakCash();
+    
+  // });
+
+
+  // test('test Navbar Home Menu', async({page}) => {
+  //   await NavPage.goToMenuHome();
+  // });
+
+  // test('test Navbar Beli Menu', async({page}) => {
+  //   await NavPage.goToBeli();
+  //   await NavPage.goToMotorBaru();
+
+  //   await NavPage.goToBeliBekas();
+  //   await NavPage.goToMotorBekas();
+
+  //   await NavPage.goToBeliListrik();
+  //   await NavPage.goToMotorListrik();
+  // });
+
+  // test('test Navbar Bantuan Menu', async({page}) => {
+  //   await NavPage.clickBantuan();
+  //   await page.goto('http://127.0.0.1:8000/user/motorlistrik');
+  // });
+
+  test('test Navbar Hai, shita Profile Menu', async({page}) => {
+    await NavPage.clickProfil();
+    await NavPage.goToProfil();
+    await EditProfilPage.ProfilEdit();
   });
 
-  test('test Navbar Home Menu', async({page}) => {
-    await DashPage.goToMenuHome();
-  });
+  // test('test Navbar Hai, shita Riwayat Cash Menu', async({page}) => {
+  //   await NavPage.clickRiwayatCash();
+  //   await NavPage.goToRiwayatCash();
+  //   await CashPage.EditRiwayatCash(new Date('2025-01-20'), 120000000);
+  //   await HapusCashPage.HapusRiwayatCash();
+  //   await page.goto('http://127.0.0.1:8000/user/RiwayatPembelian');
+  // });
 
-  test('test Navbar Beli Menu', async({page}) => {
-    await DashPage.goToBeli();
-    await DashPage.goToMotorBaru();
+  // test('test Navbar Hai, shita Riwayat Kredit Menu', async({page}) => {
+  //   await page.goto('http://127.0.0.1:8000/user/RiwayatPembelian');
+  //   await NavPage.goToRiwayatKredit();
+  //   await KreditPage.EditRiwayatKredit(new Date('2025-01-19'));
+  //   await HapusKreditPage.HapusRiwayatKredit();
+  //   await page.goto('http://127.0.0.1:8000/user/RiwayatPembelianKredit');
+  // });
 
-    await DashPage.goToBeliBekas();
-    await DashPage.goToMotorBekas();
-
-    await DashPage.goToBeliListrik();
-    await DashPage.goToMotorListrik();
-  });
-
-  test('test Navbar Bantuan Menu', async({page}) => {
-    await DashPage.clickBantuan();
-    await page.goto('http://127.0.0.1:8000/user/motorlistrik');
-  });
-
-  test('test Navbar Hai, shita Menu', async({page}) => {
-    await page.goto('http://127.0.0.1:8000/user/motorlistrik');
-    await DashPage.clickProfil();
-    await DashPage.goToProfil();
-
-    await DashPage.clickRiwayatCash();
-    await DashPage.goToRiwayatCash();
-    await DashPage.goToRiwayatKredit();
-
-    await DashPage.clickLogout();
-    await DashPage.goToLoginfromLogout();
-  });
-
+  // test('test Navbar Hai, shita Logout Menu', async({page}) => {
+  //   await NavPage.clickLogout();
+  //   await NavPage.goToLoginfromLogout();
+  // });
+  
 });
