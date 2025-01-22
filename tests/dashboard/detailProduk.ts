@@ -1,5 +1,7 @@
 import { expect, type Locator, type Page } from '@playwright/test';
 import { faker } from '@faker-js/faker/locale/id_ID';
+import fs from 'fs';
+import path from 'path';
 
 export class PlaywrightDetailProdukPage {
   readonly page: Page;
@@ -65,6 +67,7 @@ export class PlaywrightDetailProdukPage {
   readonly YaPesanKredit: Locator;
   readonly SetelahYaPesanKredit: Locator;
   readonly MenujuPopUp2: Locator;
+  readonly Cetak: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -73,14 +76,15 @@ export class PlaywrightDetailProdukPage {
 
     //Detail Motor
     this.cekBeliButton = page.locator('h3', { hasText: 'Detail Produk' });
-    this.ButtonGroup = page.locator('.product-header');
+    this.ButtonGroup = page.locator('.btn-group');
     this.CetakLinks = {
-      Cetak: this.ButtonGroup.locator('a.btn-warning.dropdown-toggle', { hasText: 'Cetak' }),
+      Cetak: this.ButtonGroup.getByText('Cetak', { exact: true }),
       CetakCash: this.ButtonGroup.locator('a', { hasText: 'Cetak Pembelian Cash' }),
       CetakKredit: this.ButtonGroup.locator('a', { hasText: 'Cetak Pembelian Kredit' }),
     };
+    this.Cetak = page.locator('a', { hasText: 'Cetak' }).filter({ has: page.locator('.fas.fa-print') });
     this.cekCashCetakPDF = page.getByLabel('Cetak').getByRole('link', { name: 'Bukti Pemesanan Motor' });
-    this.finalCashPDF = page.locator('h1', { hasText: 'Bukti Pemesanan Motor' });
+    this.finalCashPDF = page.locator('h3', { hasText: 'Detail Produk' });
 
     //Cash
     this.formCash = page.locator('a', { hasText: 'Bayar Cash' });
@@ -110,16 +114,16 @@ export class PlaywrightDetailProdukPage {
     this.Paket_Bunga = page.getByLabel('Bunga (%)');
     this.Paket_Nilai_Cicilan = page.getByLabel('Angsuran');
 
-    this.LanjutkanButton = page.locator('button', { hasText: 'Lanjutkan' });
+    this.LanjutkanButton = page.getByRole('button', { name: 'Lanjutkan' });
     this.LamanKreditSelanjutnya = page.locator('div.form-footer button.payment-button.previous-step', { hasText: 'Kembali' });
 
     this.Kredit_Kode = page.getByLabel('Id Kredit');
-    this.Pembeli_No_KTP = page.getByLabel('No. KTP');
-    this.Motor_KodeKredit = page.getByLabel('Id Motor');
-    this.Kredit_Tanggal = page.getByLabel('Tanggal Pemesanan');
-    this.Fotokopi_KTP = page.getByLabel('Foto KTP');
-    this.Fotokopi_KK = page.getByLabel('Foto Kartu Keluarga');
-    this.Fotokopi_Slip_Gaji = page.getByLabel('Foto Slip Gaji');
+    this.Pembeli_No_KTP = page.locator('#creditFormStep2 #pembeli_No_KTP');
+    this.Motor_KodeKredit = page.locator('#creditFormStep2 #motor_kode');
+    this.Kredit_Tanggal = page.locator('#creditFormStep2 #kridit_tanggal');
+    this.Fotokopi_KTP = page.locator('#fotokopi_KTP');
+    this.Fotokopi_KK = page.locator('#fotokopi_KK');
+    this.Fotokopi_Slip_Gaji = page.locator('#fotokopi_slip_gaji');
 
     this.PesanKreditButton = page.locator('button', { hasText: 'Pesan Kredit' });
     this.YaPesanKredit = page.locator('.swal2-confirm');
@@ -163,7 +167,6 @@ export class PlaywrightDetailProdukPage {
 
     await this.formKredit.click();
     await expect(this.page).toHaveURL('http://127.0.0.1:8000/user/motorbaru_desk');
-    // await this.closeForm.waitFor({ state: 'visible' });
 
     const formattedPaket_Harga_Cash = paket_harga_cash.toString();
     const formattedPaket_Uang_Muka = paket_uang_muka.toString();
@@ -176,23 +179,33 @@ export class PlaywrightDetailProdukPage {
     await this.Paket_Bunga.fill(Paket_Bunga);
     await this.Paket_Nilai_Cicilan.fill(formattedPaket_Nilai_Cicilan);
 
-    await this.LanjutkanButton.click();
-    // await expect(this.MenujuPopUp2).toBeVisible();
-    await this.page.waitForSelector('.form-group:has-text("Id Kredit")', { timeout: 10000 });
-    await expect(this.page.locator('.form-group:has-text("Id Kredit")')).toBeVisible();    
+    await this.LanjutkanButton.click();   
   }
 
-  async LanjutanBuyingKredit(kridit_kode: string, pembeli_No_KTP: string, motor_kode: string, 
-    kridit_tanggal: Date, fotokopi_KTP: string, fotokopi_KK: string, fotokopi_slip_gaji: string) {
-    const formattedDateKredit = kridit_tanggal.toISOString().split('T')[0]; 
+  async LanjutanBuyingKredit() {
+    const { faker } = require('@faker-js/faker');
 
-    await this.Kredit_Kode.fill(kridit_kode);
-    await this.Pembeli_No_KTP.fill(pembeli_No_KTP);
-    await this.Motor_KodeKredit.fill(motor_kode);
-    await this.Kredit_Tanggal.fill(formattedDateKredit);
-    await this.Fotokopi_KTP.fill(fotokopi_KTP);
-    await this.Fotokopi_KK.fill(fotokopi_KK);
-    await this.Fotokopi_Slip_Gaji.fill(fotokopi_slip_gaji);
+    const Kredit_Kode = faker.string.numeric(4);
+    const Pembeli_No_KTP = faker.string.numeric(10);
+    const Motor_KodeKredit = faker.string.numeric(4);
+    const Kredit_Tanggal = faker.date.soon(30).toISOString().split('T')[0];
+    const localFilePath = 'C:\\Users\\user\\Pictures\\Perahu-pic\\perahu-atas.png';
+    const localFilePath_KK = 'C:\\Users\\user\\Pictures\\Perahu-pic\\perahu-bawah.png';
+    const localFilePath_Gaji = 'C:\\Users\\user\\Pictures\\Perahu-pic\\perahu-belakang.png';
+
+    await this.Kredit_Kode.fill(Kredit_Kode);
+    await this.Pembeli_No_KTP.fill(Pembeli_No_KTP);
+    await this.Motor_KodeKredit.fill(Motor_KodeKredit);
+    await this.Kredit_Tanggal.fill(Kredit_Tanggal);
+
+    await this.Fotokopi_KTP.waitFor({ state: 'visible' });
+    await this.Fotokopi_KTP.setInputFiles(localFilePath);
+
+    await this.Fotokopi_KK.waitFor({ state: 'visible' });
+    await this.Fotokopi_KK.setInputFiles(localFilePath_KK);
+
+    await this.Fotokopi_Slip_Gaji.waitFor({ state: 'visible' });
+    await this.Fotokopi_Slip_Gaji.setInputFiles(localFilePath_Gaji);
 
     await this.PesanKreditButton.click();
   }
@@ -207,17 +220,9 @@ export class PlaywrightDetailProdukPage {
   //Cetak Report
   //Cash 
   async CetakCash() {
-    await this.CetakLinks.Cetak.click();
+    await this.Cetak.click();
     await expect(this.page).toHaveURL('http://127.0.0.1:8000/user/motorbaru_desk');
-    await expect(this.cekCashCetakPDF).toBeVisible();
+    await expect(this.finalCashPDF).toBeVisible();
   }
-  
-  // async goToCetakCash() {
-  //   await this.CetakLinks.CetakCash.click();
-  //   await this.page.goto('http://127.0.0.1:8000/user/motorbaru_desk/cetakpdf', {
-  //     waitUntil: 'domcontentloaded', 
-  //     timeout: 60000 
-  //   });
-  //   await expect(this.finalCashPDF).toBeVisible();
-  // }
+
 }

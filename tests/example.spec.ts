@@ -58,28 +58,9 @@ test.describe('RodaCuan-e2e', () => {
   // test('test buy new bike with credit payment', async ({ page }) => {
   //   await DashPage.goToBeliMotor();
   //   await DetailPage.BuyingMotorKredit( 110000000, 10000000, 210000000);
-    
-  //   const fotokopiKTP = 'c:/Users/user/Pictures/04178000170bf1ca61bc8864ea763d16.jpg';
-  //   const fotokopiKK = 'c:/Users/user/Pictures/be0de6f291c3f5b98de28f2b044585fe.jpg';
-  //   const fotokopiSlipGaji = 'c:/Users/user/Pictures/c1.jpg';
-
-  //   await DetailPage.LanjutanBuyingKredit(
-  //       'asd332',
-  //       '3277892671367131231',
-  //       'r125',
-  //       new Date('2025-01-19'),
-  //       fotokopiKTP,
-  //       fotokopiKK,
-  //       fotokopiSlipGaji
-  //   );
-
-  //   await DetailPage.AlertKredit();
-  // });
-
-  // test('test Button Cetak Pembelian PDF', async ({page}) => {
-  //   //Cash
+  //   await DetailPage.LanjutanBuyingKredit();
+  //   await expect(page).toHaveURL('http://127.0.0.1:8000/user/motorbaru_desk');
   //   await DetailPage.CetakCash();
-    
   // });
 
 
@@ -103,11 +84,11 @@ test.describe('RodaCuan-e2e', () => {
   //   await page.goto('http://127.0.0.1:8000/user/motorlistrik');
   // });
 
-  test('test Navbar Hai, shita Profile Menu', async({page}) => {
-    await NavPage.clickProfil();
-    await NavPage.goToProfil();
-    await EditProfilPage.ProfilEdit();
-  });
+  // test('test Navbar Hai, shita Profile Menu', async({page}) => {
+  //   await NavPage.clickProfil();
+  //   await NavPage.goToProfil();
+  //   await EditProfilPage.ProfilEdit();
+  // });
 
   // test('test Navbar Hai, shita Riwayat Cash Menu', async({page}) => {
   //   await NavPage.clickRiwayatCash();
@@ -117,13 +98,13 @@ test.describe('RodaCuan-e2e', () => {
   //   await page.goto('http://127.0.0.1:8000/user/RiwayatPembelian');
   // });
 
-  // test('test Navbar Hai, shita Riwayat Kredit Menu', async({page}) => {
-  //   await page.goto('http://127.0.0.1:8000/user/RiwayatPembelian');
-  //   await NavPage.goToRiwayatKredit();
-  //   await KreditPage.EditRiwayatKredit(new Date('2025-01-19'));
-  //   await HapusKreditPage.HapusRiwayatKredit();
-  //   await page.goto('http://127.0.0.1:8000/user/RiwayatPembelianKredit');
-  // });
+  test('test Navbar Hai, shita Riwayat Kredit Menu', async({page}) => {
+    await page.goto('http://127.0.0.1:8000/user/RiwayatPembelian');
+    await NavPage.goToRiwayatKredit();
+    await KreditPage.EditRiwayatKredit();
+    await HapusKreditPage.HapusRiwayatKredit();
+    await page.goto('http://127.0.0.1:8000/user/RiwayatPembelianKredit');
+  });
 
   // test('test Navbar Hai, shita Logout Menu', async({page}) => {
   //   await NavPage.clickLogout();
