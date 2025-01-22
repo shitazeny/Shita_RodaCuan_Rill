@@ -18,7 +18,6 @@ export class PlaywrightEditCashPage {
     this.EditCash = page.locator('button', { hasText: 'Edit' });
     this.cekEditCash = page.locator('h2', { hasText: 'Data Transaksi Cash' });
 
-    this.Cash_Kode = page.getByLabel('Id Cash');
     this.No_KTP = page.getByLabel('No. KTP');
     this.Motor_Kode = page.getByLabel('Id Motor');
     this.Cash_Tanggal = page.getByLabel('Tanggal Pemesanan');
@@ -30,14 +29,12 @@ export class PlaywrightEditCashPage {
 
 
   async EditRiwayatCash(cash_tanggal: Date, cash_bayar: number) {
-    const Cash_Kode = faker.string.numeric(4);
     const No_KTP = faker.string.numeric(10);
     const Motor_Kode = faker.string.numeric(4);
 
     await this.EditCash.first().click();
 
     await expect(this.page).toHaveURL('http://127.0.0.1:8000/user/RiwayatPembelian');
-    await this.Cash_Kode.fill(Cash_Kode);
     await this.No_KTP.fill(No_KTP);
     await this.Motor_Kode.fill(Motor_Kode);
     

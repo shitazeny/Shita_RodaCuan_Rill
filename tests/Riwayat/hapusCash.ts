@@ -15,7 +15,7 @@ export class PlaywrightHapusCashPage {
   }
 
   async HapusRiwayatCash() {
-    await this.HapusCash.first().click();
+    await this.HapusCash.last().click();
     await this.confirmButtonCash.click();
     await expect(this.page).toHaveURL('http://127.0.0.1:8000/user/RiwayatPembelian');
     await expect(this.cekHapusCash).toBeVisible();

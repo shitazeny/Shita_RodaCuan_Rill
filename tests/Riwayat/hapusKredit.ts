@@ -15,7 +15,7 @@ export class PlaywrightHapusKreditPage {
   }
 
   async HapusRiwayatKredit() {
-    await this.HapusKredit.first().click();
+    await this.HapusKredit.last().click();
     await this.confirmButtonKredit.click();
     await expect(this.page).toHaveURL('http://127.0.0.1:8000/user/RiwayatPembelianKredit');
     await expect(this.cekHapusKredit).toBeVisible();

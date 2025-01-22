@@ -22,12 +22,12 @@ export class PlaywrightEditKreditPage {
     this.EditKredit = page.locator('button', { hasText: 'Edit' });
     this.cekEditKredit = page.locator('h2', { hasText: 'Data Transaksi Kredit' });
 
-    this.No_KTP = page.locator('input[name="pembeli_No_KTP"]');
-    this.Motor_Kode = page.locator('input[name="motor_kode"]');
-    this.Kredit_Tanggal = page.locator('input[name="kridit_tanggal"]');
-    this.Fotokopi_KTP = page.locator('input[name="fotokopi_KTP"]');
-    this.Fotokopi_KK = page.locator('input[name="fotokopi_KK"]');
-    this.Fotokopi_Slip_Gaji = page.locator('input[name="fotokopi_slip_gaji"]');
+    this.No_KTP = page.getByLabel('No. KTP');
+    this.Motor_Kode = page.getByLabel('Id Motor')
+    this.Kredit_Tanggal = page.getByLabel('Tanggal Pemesanan')
+    this.Fotokopi_KTP = page.locator('input[type="file"][name="fotokopi_KTP"]').first();
+    this.Fotokopi_KK = page.locator('input[type="file"][name="fotokopi_KK"]').first();
+    this.Fotokopi_Slip_Gaji = page.locator('input[type="file"][name="fotokopi_slip_gaji"]').first();
 
     this.SimpanKredit = page.locator('button', { hasText: 'Simpan' });
   }
@@ -40,6 +40,9 @@ export class PlaywrightEditKreditPage {
     const Fotokopi_KK = faker.image.url();
     const Fotokopi_Slip_Gaji = faker.image.url();
     const Kredit_Tanggal = faker.date.soon(30).toISOString().split('T')[0];
+    const filePath = 'C:\\Users\\user\\Pictures\\c4.jpg';
+    const filePath_KK = 'C:\\Users\\user\\Pictures\\c5.jpg';
+    const filePath_Gaji = 'C:\\Users\\user\\Pictures\\c2.jpg';
 
     await this.EditKredit.first().click();
     await expect(this.page).toHaveURL('http://127.0.0.1:8000/user/RiwayatPembelianKredit');
@@ -47,9 +50,15 @@ export class PlaywrightEditKreditPage {
     await this.No_KTP.fill(No_KTP);
     await this.Motor_Kode.fill(Motor_Kode);
     await this.Kredit_Tanggal.fill(Kredit_Tanggal);
-    await this.Fotokopi_KTP.fill(Fotokopi_KTP);
-    await this.Fotokopi_KK.fill(Fotokopi_KK);
-    await this.Fotokopi_Slip_Gaji.fill(Fotokopi_Slip_Gaji);
+
+    await this.Fotokopi_KTP.waitFor({ state: 'visible' });
+    await this.Fotokopi_KTP.setInputFiles(filePath);
+
+    await this.Fotokopi_KK.waitFor({ state: 'visible' });
+    await this.Fotokopi_KK.setInputFiles(filePath_KK);
+
+    await this.Fotokopi_Slip_Gaji.waitFor({ state: 'visible' });
+    await this.Fotokopi_Slip_Gaji.setInputFiles(filePath_Gaji);
 
     await this.SimpanKredit.first().click();
     await expect(this.cekEditKredit).toBeVisible();
