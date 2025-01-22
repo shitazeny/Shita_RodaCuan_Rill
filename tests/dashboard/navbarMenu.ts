@@ -81,10 +81,10 @@ export class PlaywrightNavbarPage {
       MotorBekas: this.navbar.locator('a', { hasText: 'Motor Bekas' }),
       MotorListrik: this.navbar.locator('a', { hasText: 'Motor Listrik' }),
 
-      HaiShita: this.navbar.locator('a', { hasText: 'Hai, shita' }),
+      HaiShita: this.navbar.getByRole('button', { name: 'Hai, shita' }),
       Profile: this.navbar.locator('a', { hasText: 'Profile' }),
       Riwayat: this.navbar.locator('a', { hasText: 'Riwayat' }),
-      Logout: this.navbar.locator('a', { hasText: 'Logout' }),
+      Logout: this.navbar.getByRole('link', { name: 'Logout' }),
     };
     //Navbar Home Menu
     this.cekHomeMenu = page.locator('text=Motor Baru Paling Laris');
