@@ -95,11 +95,9 @@ test.describe('RodaCuan-e2e', () => {
     await NavPage.goToRiwayatCash();
     await CashPage.EditRiwayatCash(new Date('2025-01-20'), 120000000);
     await HapusCashPage.HapusRiwayatCash();
-    await page.goto('http://127.0.0.1:8000/user/RiwayatPembelian');
   });
 
   test('test Navbar Hai, shita Riwayat Kredit Menu', async({page}) => {
-    await page.goto('http://127.0.0.1:8000/user/RiwayatPembelian');
     await NavPage.goToRiwayatKredit();
     await KreditPage.EditRiwayatKredit();
     await HapusKreditPage.HapusRiwayatKredit();

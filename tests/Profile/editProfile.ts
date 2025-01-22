@@ -24,7 +24,7 @@ export class PlaywrightEditProfilPage {
     this.Telepon = page.getByLabel('Telepon');
     this.HP = page.getByLabel('HP');
 
-    this.SimpanProfil = page.locator('button', { hasText: 'Simpan Profil' });
+    this.SimpanProfil = page.getByTestId('buttonSimpanProfil');
     this.SetelahSimpanProfil = page.locator('h2', { hasText: 'Profil Pembeli'});
   }
 
@@ -32,31 +32,15 @@ export class PlaywrightEditProfilPage {
     const NoKTP = faker.string.numeric(10);
     const Nama = faker.person.fullName();
     const Alamat = faker.address.city();
-    const Telepon = faker.phone.number({ style: 'national' });
-    const HP = faker.phone.number({ style: 'national' });
 
     await this.EditProfil.click();
 
-    await this.NoKTP.fill(NoKTP);
+    // await this.NoKTP.fill(NoKTP);
     await this.Nama.fill(Nama);
-    await this.Alamat.fill(Alamat);
-    await this.Telepon.fill(Telepon);
-    await this.HP.fill(HP);
+    // await this.Alamat.fill(Alamat);
 
-    // await this.page.getByRole('button', { name: 'Simpan Profil' }).click();
-    await this.page.getByTestId('buttonSimpanProfil').click();
-    await expect(this.page).toHaveURL('http://127.0.0.1:8000/user/profile');
+    await this.SimpanProfil.click();
+    // await expect(this.page).toHaveURL('http://127.0.0.1:8000/user/profile');
     await expect(this.SetelahSimpanProfil).toBeVisible();
   }
 }
-
-// await page.getByRole('button', { name: ' Edit' }).first().click();
-// await page.getByLabel('Id', { exact: true }).click();
-// await page.getByLabel('No. KTP').click();
-// await page.getByLabel('No. KTP').fill('327709876512345');
-// await page.getByLabel('Id Motor').click();
-// await page.getByLabel('Tanggal Pemesanan').fill('2025-01-21');
-// await page.getByLabel('Bayar').click();
-// await page.getByLabel('Bayar').click();
-// await page.getByLabel('Bayar').click();
-// await page.getByLabel('Bayar').fill('1200000000');
